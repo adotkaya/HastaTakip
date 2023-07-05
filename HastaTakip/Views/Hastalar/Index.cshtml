@@ -1,0 +1,47 @@
+﻿@model IEnumerable<HastaTakip.Models.Hasta>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Kayıtlı Hastalar</h1>
+
+<p>
+    <a asp-action="Create">Yeni Hasta Kayıt</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+               <a>TC Numarası</a>
+            </th>
+            <th>
+                <a>Adı ve Soyadı</a>
+            </th>
+            <th>
+                <a>Doğum Tarihi</a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.hasta_tc)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.hasta_ad_soyad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.dogum_tarihi)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.hasta_id">Bilgileri Güncelle</a> |
+                <a asp-action="Details" asp-route-id="@item.hasta_id">Bilgiler</a> |
+                <a asp-action="Delete" asp-route-id="@item.hasta_id">Hasta Kaydını Sil</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

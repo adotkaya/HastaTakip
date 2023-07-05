@@ -1,0 +1,48 @@
+﻿@model HastaTakip.Models.Ziyaret
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Ziyaret</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.hasta_id)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.hasta_id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ziyaret_tarihi)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ziyaret_tarihi)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.doktor_adi)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.doktor_adi)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.sikayet)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.sikayet)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.tedavi_sekli)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.tedavi_sekli)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.ziyaret_id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
