@@ -13,17 +13,17 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="hasta_tc" class="control-label"></label>
+                <label asp-for="hasta_tc" class="control-label">TC Numarası</label>
                 <input asp-for="hasta_tc" class="form-control" />
                 <span asp-validation-for="hasta_tc" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="hasta_ad_soyad" class="control-label"></label>
+                <label asp-for="hasta_ad_soyad" class="control-label">Hastanın Adı ve Soyadı</label>
                 <input asp-for="hasta_ad_soyad" class="form-control" />
                 <span asp-validation-for="hasta_ad_soyad" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="dogum_tarihi" class="control-label"></label>
+                <label asp-for="dogum_tarihi" class="control-label">Doğum Tarihi</label>
                 <input asp-for="dogum_tarihi" class="form-control" />
                 <span asp-validation-for="dogum_tarihi" class="text-danger"></span>
             </div>

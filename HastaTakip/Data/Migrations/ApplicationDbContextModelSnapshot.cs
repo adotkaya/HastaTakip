@@ -36,11 +36,13 @@ namespace HastaTakip.Data.Migrations
 
                     b.Property<string>("hasta_ad_soyad")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
 
                     b.Property<string>("hasta_tc")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(11)
+                        .HasColumnType("character varying(11)");
 
                     b.HasKey("hasta_id");
 
@@ -59,7 +61,7 @@ namespace HastaTakip.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("hasta_id")
+                    b.Property<int>("hasta_id1")
                         .HasColumnType("integer");
 
                     b.Property<string>("sikayet")
@@ -75,7 +77,20 @@ namespace HastaTakip.Data.Migrations
 
                     b.HasKey("ziyaret_id");
 
+                    b.HasIndex("hasta_id1");
+
                     b.ToTable("ziyaretler");
+                });
+
+            modelBuilder.Entity("HastaTakip.Models.Ziyaret", b =>
+                {
+                    b.HasOne("HastaTakip.Models.Hasta", "hasta_id")
+                        .WithMany()
+                        .HasForeignKey("hasta_id1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("hasta_id");
                 });
 #pragma warning restore 612, 618
         }

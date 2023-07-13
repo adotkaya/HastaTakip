@@ -1,66 +1,113 @@
 ﻿@model IEnumerable<HastaTakip.Models.Ziyaret>
 
+
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Hasta Ziyaretleri</h1>
 
-<p>
-    <a asp-action="Create">Hasta Ziyareti Ekle</a>
-</p>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                <a>Ziyaret Numarası</a>
-            </th>
-            <th>
-                <a>Hasta ID</a>
-            </th>
-            <th>
-                <a>Ziyaret Tarihi</a>
-            </th>
-            <th>
-                <a>İlgilenen Doktor</a> 
-            </th>
-            <th>
-                <a>Hastanın Şikayeti</a>
-            </th>
-            <th>
-                <a>Uygulanan Tedavi</a>
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ziyaret_id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.hasta_id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ziyaret_tarihi)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.doktor_adi)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.sikayet)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.tedavi_sekli)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ziyaret_id">Ziyaret Bilgilerini Güncelle</a> |
-                <a asp-action="Details" asp-route-id="@item.ziyaret_id">Ziyaret Bilgileri</a> |
-                <a asp-action="Delete" asp-route-id="@item.ziyaret_id">Ziyaret Kaydını Sil</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"]</title>
+    <style>
+        .create-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            background-color: #007bff; /* Set the background color to blue */
+            color: #fff;
+            font-size: 18px;
+            padding: 14px 28px; /* Increase padding to make the button larger */
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background-color 0.3s ease, color 0.3s ease; /* Add color transition */
+        }
+
+            .create-link:hover {
+                background-color: #0056b3; /* Darker shade of blue on hover */
+                color: #fff; /* Change text color on hover */
+            }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+            .table th {
+                background-color: #007bff; /* Set the background color of the table header to blue */
+                color: #fff;
+                padding: 10px;
+                font-weight: bold;
+                text-align: left;
+                font-size: 16px;
+            }
+
+            .table td {
+                background-color: #fff;
+                padding: 10px;
+                border-bottom: 1px solid #ccc;
+            }
+
+                .table td a {
+                    text-decoration: none;
+                    color: #007bff; /* Set the link color to blue */
+                    font-size: 16px;
+                    margin-right: 10px;
+                    transition: color 0.3s ease; /* Add color transition */
+                }
+
+                    .table td a:hover {
+                        text-decoration: underline;
+                        color: #0056b3; /* Darker shade of blue on hover */
+                    }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hasta Ziyaretleri</h1>
+        <p><a class="create-link" asp-action="Create" style="text-decoration: none;">Hasta Ziyareti Ekle</a></p>
+    <table class="table">
+    </table>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="border-radius: 4px 0 0 0;">Ziyaret Numarası</th>
+                    <th>Hasta ID</th>
+                    <th>Ziyaret Tarihi</th>
+                    <th>İlgilenen Doktor</th>
+                    <th>Hastanın Şikayeti</th>
+                    <th>Uygulanan Tedavi</th>
+                    <th style="border-radius: 0 4px 0 0;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.ziyaret_id)</td>
+                        <td>@Html.DisplayFor(modelItem => item.hasta_id)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ziyaret_tarihi)</td>
+                        <td>@Html.DisplayFor(modelItem => item.doktor_adi)</td>
+                        <td>@Html.DisplayFor(modelItem => item.sikayet)</td>
+                        <td>@Html.DisplayFor(modelItem => item.tedavi_sekli)</td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.ziyaret_id" style="text-decoration: none; color: #007bff; margin-right: 10px;">Ziyaret Bilgilerini Güncelle</a>
+                            <a asp-action="Details" asp-route-id="@item.ziyaret_id" style="text-decoration: none; color: #007bff; margin-right: 10px;">Ziyaret Bilgileri</a>
+                            <a asp-action="Delete" asp-route-id="@item.ziyaret_id" style="text-decoration: none; color: #007bff; margin-right: 10px;">Ziyaret Kaydını Sil</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -60,10 +60,19 @@ namespace HastaTakip.Views
         {
             if (ModelState.IsValid)
             {
+                // Check if the provided hasta_id exists in the hastalar table
+                bool hastaExists = await _context.hastalar.AnyAsync(h => h.hasta_id == ziyaret.hasta_id);
+                if (!hastaExists)
+                {
+                    ModelState.AddModelError(string.Empty, "Bu ID'ye sahip bir hasta bulunmamaktadır. Lütfen kayıtlı hastalardan birinin numarasını giriniz ya da yeni hasta yaratınız");
+                    return View(ziyaret);
+                }
+
                 _context.Add(ziyaret);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             return View(ziyaret);
         }
 
@@ -154,6 +163,7 @@ namespace HastaTakip.Views
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool ZiyaretExists(int id)
         {

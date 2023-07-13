@@ -2,6 +2,74 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Hoşgeldiniz!</h1>
-</div>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff; /* Set the background color to white */
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+            .header h1 {
+                font-size: 36px;
+                color: #333;
+                margin-bottom: 10px;
+            }
+
+            .header p {
+                font-size: 18px;
+                color: #666;
+            }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: #007bff; /* Set the background color to blue */
+            color: #fff;
+            font-size: 18px;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: background-color 0.3s ease;
+        }
+
+            .cta-button:hover {
+                background-color: #0056b3; /* Darker shade of blue on hover */
+                color: #fff; /* Change text color on hover */
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1> HastaTakip'e Hoşgeldiniz!</h1>
+            <p>HastaTakip hastalarınızın kayıtlarını tutmanıza ve ziyaretlerini kaydetmenize olanak sağlayan bir internet sitesidir.</p>
+        </div>
+        <div class="cta-buttons">
+            <a href="./Hastalar" class="cta-button">Hastalar</a>
+            <a href="./Ziyaretler" class="cta-button">Ziyaretler</a>
+        </div>
+    </div>
+</body>
+</html>

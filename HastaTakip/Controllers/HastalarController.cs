@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HastaTakip.Context;
 using HastaTakip.Models;
+using Npgsql;
 
 namespace HastaTakip.Controllers
 {
@@ -22,9 +23,13 @@ namespace HastaTakip.Controllers
         // GET: Hastalar
         public async Task<IActionResult> Index()
         {
-            return _context.hastalar != null ?
-                        View(await _context.hastalar.ToListAsync()) :
-                        Problem("Entity set 'ApplicationDbContext.hastalar'  is null.");
+            if (_context.hastalar == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.hastalar' is null.");
+            }
+
+            var hastalar = await _context.hastalar.ToListAsync();
+            return View(hastalar);
         }
 
         // GET: Hastalar/Details/5
@@ -52,18 +57,43 @@ namespace HastaTakip.Controllers
         }
 
         // POST: Hastalar/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("hasta_id,hasta_tc,hasta_ad_soyad,dogum_tarihi")] Hasta hasta)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(hasta);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    await _context.Database.ExecuteSqlInterpolatedAsync($"CALL insert_hasta({hasta.hasta_tc}, {hasta.hasta_ad_soyad}, {hasta.dogum_tarihi})");
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    if (ex.InnerException is PostgresException postgresException && postgresException.SqlState == "23505")
+                    {
+                        ModelState.AddModelError(string.Empty, "Girilen TC Kimlik numarasıyla bir hasta bulunmakta. Lütfen başka bir TC giriniz.");
+                        return View(hasta);
+                    }
+                    else if (ex.GetBaseException() is PostgresException basePostgresException && basePostgresException.SqlState == "23505")
+                    {
+                        ModelState.AddModelError(string.Empty, "Girilen TC Kimlik numarasıyla bir hasta bulunmakta. Lütfen başka bir TC giriniz.");
+                        return View(hasta);
+                    }
+                    else
+                    {
+                        // Handle other exceptions or log the error
+                        // ...
+
+                        // Optionally, you can redirect to an error page
+                        return RedirectToAction("Error", "Home");
+                    }
+                }
+
+
             }
+
+            // If the ModelState is not valid or there was a duplicate key violation, return the same view with the error messages
             return View(hasta);
         }
 
@@ -84,8 +114,6 @@ namespace HastaTakip.Controllers
         }
 
         // POST: Hastalar/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("hasta_id,hasta_tc,hasta_ad_soyad,dogum_tarihi")] Hasta hasta)
@@ -99,21 +127,30 @@ namespace HastaTakip.Controllers
             {
                 try
                 {
-                    _context.Update(hasta);
-                    await _context.SaveChangesAsync();
+                    await _context.Database.ExecuteSqlInterpolatedAsync($"CALL update_hasta({hasta.hasta_id}, {hasta.hasta_tc}, {hasta.hasta_ad_soyad}, {hasta.dogum_tarihi})");
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
                 {
-                    if (!HastaExists(hasta.hasta_id))
+                    if (ex.InnerException is PostgresException postgresException && postgresException.SqlState == "23505")
                     {
-                        return NotFound();
+                        ModelState.AddModelError(string.Empty, "Girilen TC Kimlik numarasıyla bir hasta bulunmakta. Lütfen başka bir TC giriniz.");
+                        return View(hasta);
+                    }
+                    else if (ex.GetBaseException() is PostgresException basePostgresException && basePostgresException.SqlState == "23505")
+                    {
+                        ModelState.AddModelError(string.Empty, "Girilen TC Kimlik numarasıyla bir hasta bulunmakta. Lütfen başka bir TC giriniz.");
+                        return View(hasta);
                     }
                     else
                     {
-                        throw;
+                        // Handle other exceptions or log the error
+                        // ...
+
+                        // Optionally, you can redirect to an error page
+                        return RedirectToAction("Error", "Home");
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
             return View(hasta);
         }
@@ -143,16 +180,19 @@ namespace HastaTakip.Controllers
         {
             if (_context.hastalar == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.hastalar'  is null.");
-            }
-            var hasta = await _context.hastalar.FindAsync(id);
-            if (hasta != null)
-            {
-                _context.hastalar.Remove(hasta);
+                return Problem("Entity set 'ApplicationDbContext.hastalar' is null.");
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _context.Database.ExecuteSqlInterpolatedAsync($"CALL delete_hasta({id})");
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                // Handle the exception or log the error
+                throw;
+            }
         }
 
         private bool HastaExists(int id)
